@@ -1,7 +1,6 @@
 package com.example.tp4
 
 import BusClassAdapter
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -11,36 +10,33 @@ import com.example.tp4.busClassFeature.BusScheduleViewModel
 import com.example.tp4.busClassFeature.BusScheduleViewModelFactory
 import com.example.tp4.busschedule.BusScheduleApplication
 
-class MainActivity : AppCompatActivity() {
+class DetailsActivity : AppCompatActivity() {
     private val busScheduleViewModel : BusScheduleViewModel by viewModels() {
         BusScheduleViewModelFactory((application as BusScheduleApplication).database.getScheduleDao())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        InitAdapter()
+        setContentView(R.layout.details_activity)
+        val stopName = intent.getStringExtra("stopName")!!
+        InitAdapter(stopName)
     }
 
-    private fun InitAdapter() {
-        val busClassAdapter = BusClassAdapter { schedule ->
-            var intent = Intent(this@MainActivity, DetailsActivity::class.java)
-            intent.putExtra("stopName", schedule.stopName)
-            startActivity(intent);
-        }
+    private fun InitAdapter(stopName: String) {
+        val busClassAdapter = BusClassAdapter(null)
         SetupRecycleView(busClassAdapter)
-        InitList(busClassAdapter)
+        InitList(busClassAdapter, stopName)
     }
-    private fun InitList(busClassAdapter: BusClassAdapter) {
-         busScheduleViewModel
-             .fullSchedule()
-             .observe(this) {
+    private fun InitList(busClassAdapter: BusClassAdapter, stopName: String) {
+        busScheduleViewModel
+            .scheduleForStopName(stopName)
+            .observe(this) {
                 busClassAdapter.updateList(it)
-             }
+            }
     }
     private fun SetupRecycleView(busClassAdapter: BusClassAdapter) {
         val recyclerView: RecyclerView = findViewById(R.id.recycleView)
-        recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
+        recyclerView.layoutManager = LinearLayoutManager(this@DetailsActivity)
         recyclerView.adapter = busClassAdapter
     }
 

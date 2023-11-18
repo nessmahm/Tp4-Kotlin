@@ -17,7 +17,7 @@ abstract class AppDatabase : RoomDatabase() {
             if (this.instance != null) {
                 return this.instance!!
             }
-            instance =createDatabase(context)
+            instance = createDatabase(context)
             return instance!!
         }
 
