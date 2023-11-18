@@ -1,5 +1,3 @@
-![image](https://github.com/YassineRaboudi007/TP4/assets/93160741/bd021676-e3cd-4978-9a14-6bfc75bd5428)# TP4
-
 This is a simple app that shows data from a database using room and displays it 
 
 Here is the MainActivity View:
